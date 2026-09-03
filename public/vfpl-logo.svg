@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="VFPL">
+  <defs>
+    <linearGradient id="shield" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e4fd6"/>
+      <stop offset="100%" stop-color="#0b1f52"/>
+    </linearGradient>
+  </defs>
+  <path d="M60 6 L104 24 V58 C104 86 82 104 60 114 C38 104 16 86 16 58 V24 Z" fill="url(#shield)" stroke="#5eb3ff" stroke-width="2"/>
+  <circle cx="60" cy="52" r="16" fill="#ffffff" opacity="0.95"/>
+  <path d="M60 40c-6.6 0-12 5.4-12 12s5.4 12 12 12 12-5.4 12-12-5.4-12-12-12z" fill="#0b1f52"/>
+  <path d="M44 72h32l-4 10H48z" fill="#5eb3ff"/>
+  <text x="60" y="98" text-anchor="middle" fill="#ffffff" font-size="8" font-family="Arial,sans-serif" font-weight="700">VFPL</text>
+</svg>
