@@ -6,7 +6,7 @@ import PlayerProfileCard from "@/components/PlayerProfileCard";
 import PptxUpload from "@/components/PptxUpload";
 import SiteNav from "@/components/SiteNav";
 import { filledSlots, useAuction } from "@/lib/auction-context";
-import { SLOT_COUNT, TEAM_COUNT, type Player } from "@/lib/types";
+import { displayPlayerNo, SLOT_COUNT, TEAM_COUNT, type Player } from "@/lib/types";
 
 function matchesSearch(player: Player, query: string) {
   if (!query) return true;
@@ -229,21 +229,29 @@ export default function AuctionBoard() {
               <span className="count-badge">{filteredPool.length}</span>
             </div>
             <div className="pool-list">
-              {filteredPool.map((player: Player) => (
-                <button
-                  key={player.id}
-                  type="button"
-                  className={`pool-item ${
-                    player.id === selectedPlayerId ? "active" : ""
-                  }`}
-                  onClick={() => selectPlayer(player)}
-                >
-                  <span className="pool-name">{player.name}</span>
-                  {player.role ? (
-                    <span className="pool-meta">{player.role}</span>
-                  ) : null}
-                </button>
-              ))}
+              {filteredPool.map((player: Player) => {
+                const playerNo = displayPlayerNo(player);
+                return (
+                  <button
+                    key={player.id}
+                    type="button"
+                    className={`pool-item ${
+                      player.id === selectedPlayerId ? "active" : ""
+                    }`}
+                    onClick={() => selectPlayer(player)}
+                  >
+                    <span className="pool-identity">
+                      {playerNo ? (
+                        <span className="pool-no">{playerNo}</span>
+                      ) : null}
+                      <span className="pool-name">{player.name}</span>
+                    </span>
+                    {player.role ? (
+                      <span className="pool-meta">{player.role}</span>
+                    ) : null}
+                  </button>
+                );
+              })}
               {pool.length === 0 ? (
                 <p className="empty">
                   No players yet. Upload a player profile PPTX to save them in
@@ -261,18 +269,26 @@ export default function AuctionBoard() {
               <span className="count-badge muted">{filteredUnsold.length}</span>
             </div>
             <div className="pool-list">
-              {filteredUnsold.map((player: Player) => (
-                <div key={player.id} className="unsold-item">
-                  <span className="pool-name">{player.name}</span>
-                  <button
-                    type="button"
-                    className="btn-resell"
-                    onClick={() => reSellPlayer(player.id)}
-                  >
-                    Re-list
-                  </button>
-                </div>
-              ))}
+              {filteredUnsold.map((player: Player) => {
+                const playerNo = displayPlayerNo(player);
+                return (
+                  <div key={player.id} className="unsold-item">
+                    <span className="pool-identity">
+                      {playerNo ? (
+                        <span className="pool-no">{playerNo}</span>
+                      ) : null}
+                      <span className="pool-name">{player.name}</span>
+                    </span>
+                    <button
+                      type="button"
+                      className="btn-resell"
+                      onClick={() => reSellPlayer(player.id)}
+                    >
+                      Re-list
+                    </button>
+                  </div>
+                );
+              })}
               {unsold.length === 0 ? (
                 <p className="empty">No unsold players.</p>
               ) : filteredUnsold.length === 0 ? (

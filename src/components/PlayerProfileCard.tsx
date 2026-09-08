@@ -1,19 +1,10 @@
-import type { Player } from "@/lib/types";
+import { displayPlayerNo, type Player } from "@/lib/types";
 import { VFPL_LOGO } from "@/lib/brand";
 import Image from "next/image";
 
 type PlayerProfileCardProps = {
   player: Player;
 };
-
-function displayPlayerNo(player: Player): string {
-  const digits = player.playerNo.replace(/\D/g, "");
-  const n = Number(digits);
-  if (digits && Number.isFinite(n) && n > 0) {
-    return String(n).padStart(2, "0");
-  }
-  return "—";
-}
 
 export default function PlayerProfileCard({ player }: PlayerProfileCardProps) {
   return (
@@ -38,7 +29,7 @@ export default function PlayerProfileCard({ player }: PlayerProfileCardProps) {
         <div className="profile-number-badge">
           <span className="profile-number-label">PLAYER NO.</span>
           <strong className="profile-number-value">
-            {displayPlayerNo(player)}
+            {displayPlayerNo(player) || "—"}
           </strong>
         </div>
       </header>

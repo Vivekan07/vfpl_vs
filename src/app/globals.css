@@ -719,6 +719,23 @@ body {
   background: rgba(0, 230, 118, 0.08);
 }
 
+.pool-identity {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.pool-no {
+  flex-shrink: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  min-width: 1.55rem;
+}
+
 .pool-name {
   font-weight: 700;
   font-size: 0.92rem;

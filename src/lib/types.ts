@@ -9,6 +9,16 @@ export type Player = {
   basePrice: number;
 };
 
+/** Jersey / profile number as "07", or empty if missing. */
+export function displayPlayerNo(player: Player): string {
+  const digits = player.playerNo.replace(/\D/g, "");
+  const n = Number(digits);
+  if (digits && Number.isFinite(n) && n > 0) {
+    return String(n).padStart(2, "0");
+  }
+  return "";
+}
+
 export type SoldPlayer = {
   player: Player;
   bid: number;
