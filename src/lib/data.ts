@@ -1,4 +1,4 @@
-import { VFPL_LOGO } from "./brand";
+import { TEAM_LOGOS } from "./brand";
 import {
   DEFAULT_BASE_PRICE,
   SLOT_COUNT,
@@ -13,35 +13,35 @@ export const TEAM_DEFINITIONS = [
     name: "Karthigai FC",
     shortName: "KFC",
     color: "#c41e3a",
-    logo: VFPL_LOGO,
+    logo: TEAM_LOGOS.kfc,
   },
   {
     id: "t2",
     name: "Lightning Stars SC",
     shortName: "LSS",
     color: "#f5c518",
-    logo: VFPL_LOGO,
+    logo: TEAM_LOGOS.lss,
   },
   {
     id: "t3",
     name: "Delta Super Kings",
     shortName: "DSK",
     color: "#1e40af",
-    logo: VFPL_LOGO,
+    logo: TEAM_LOGOS.dsk,
   },
   {
     id: "t4",
     name: "Koththiyal Kings Sports Club",
     shortName: "KKSC",
     color: "#15803d",
-    logo: VFPL_LOGO,
+    logo: TEAM_LOGOS.kksc,
   },
   {
     id: "t5",
-    name: "Team X",
-    shortName: "TX",
-    color: "#64748b",
-    logo: VFPL_LOGO,
+    name: "S.K.K UNITED FC",
+    shortName: "SKK",
+    color: "#1e3a5f",
+    logo: TEAM_LOGOS.skk,
   },
 ] as const;
 
