@@ -30,16 +30,16 @@ export function isLiveStatus(value: unknown): value is LiveStatus {
 
 export const LIVE_NOTICE = {
   idle: {
-    title: "Wait a moment",
-    message: "Waiting for a player",
+    title: "Waiting for a player",
+    message: "",
   },
   break: {
     title: "Auction break",
-    message: "Break will come in a moment",
+    message: "",
   },
   wait: {
-    title: "Please wait",
-    message: "Wait a moment",
+    title: "Wait a moment",
+    message: "",
   },
   sold: {
     title: "Signed",

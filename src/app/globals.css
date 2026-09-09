@@ -113,71 +113,80 @@ body {
 .live-notice-board {
   width: min(920px, 100%);
   min-width: 0;
-  min-height: min(58vh, 620px);
-  display: grid;
-  place-content: center;
+  min-height: min(64vh, 720px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  gap: 0.85rem;
-  padding: 3rem 2rem;
-  border-radius: 18px;
+  gap: 0.65rem;
+  padding: 2.4rem 2rem 2.6rem;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #081428;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
   animation: liveDealIn 280ms ease-out;
 }
 
-.live-notice-break {
-  background: linear-gradient(180deg, rgba(255, 213, 79, 0.14), rgba(8, 20, 40, 0.92));
-  border: 2px solid rgba(255, 213, 79, 0.55);
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+.live-notice-crest {
+  width: min(420px, 78vw);
+  margin-bottom: 0.35rem;
 }
 
-.live-notice-wait {
-  background: linear-gradient(180deg, rgba(94, 179, 255, 0.16), rgba(8, 20, 40, 0.92));
-  border: 2px solid rgba(94, 179, 255, 0.5);
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+.live-notice-logo {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
-.live-notice-idle {
-  background: linear-gradient(180deg, rgba(0, 230, 118, 0.14), rgba(8, 20, 40, 0.92));
-  border: 2px solid rgba(0, 230, 118, 0.45);
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
-}
-
-.live-notice-sold {
-  background: linear-gradient(180deg, rgba(0, 230, 118, 0.2), rgba(8, 20, 40, 0.92));
-  border: 2px solid rgba(0, 230, 118, 0.65);
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
-}
-
+.live-notice-break,
+.live-notice-wait,
+.live-notice-idle,
+.live-notice-sold,
 .live-notice-unsold {
-  background: linear-gradient(180deg, rgba(255, 112, 67, 0.18), rgba(8, 20, 40, 0.92));
-  border: 2px solid rgba(255, 112, 67, 0.55);
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+  background: #ffffff;
+  border: 0;
 }
 
 .live-notice-kicker {
-  margin: 0;
-  letter-spacing: 0.22em;
+  margin: 0.15rem 0 0;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--accent);
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.05rem, 3.2vw, 1.7rem);
+  font-weight: 800;
+  color: #081428;
 }
 
 .live-notice-board h2 {
-  margin: 0;
+  margin: 0.15rem 0 0;
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(2.4rem, 7vw, 5rem);
-  letter-spacing: 0.06em;
+  font-size: clamp(1.7rem, 5.2vw, 3.2rem);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  line-height: 0.95;
+  line-height: 1;
+  color: #0b3a82;
+}
+
+.live-notice-break h2 {
+  color: #8a6200;
+}
+
+.live-notice-sold h2 {
+  color: #0d7a3e;
+}
+
+.live-notice-unsold h2 {
+  color: #c2410c;
 }
 
 .live-notice-message {
   margin: 0;
-  font-size: clamp(1.05rem, 3.4vw, 2rem);
+  font-size: clamp(0.95rem, 2.4vw, 1.35rem);
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: #334155;
   overflow-wrap: anywhere;
   max-width: 100%;
   line-height: 1.25;
@@ -1128,13 +1137,21 @@ body {
     height: 3.4rem;
   }
 
+  .live-notice-crest {
+    width: min(280px, 70vw);
+  }
+
+  .live-notice-kicker {
+    font-size: clamp(0.9rem, 4.2vw, 1.2rem);
+  }
+
   .live-notice-board h2 {
-    font-size: clamp(1.8rem, 12vw, 3.2rem);
+    font-size: clamp(1.45rem, 8vw, 2.4rem);
   }
 
   .live-notice-message {
-    font-size: clamp(1rem, 4.6vw, 1.35rem);
-    letter-spacing: 0.03em;
+    font-size: clamp(0.9rem, 4.2vw, 1.2rem);
+    letter-spacing: 0.06em;
   }
 }
 

@@ -623,7 +623,11 @@ export function AuctionProvider({ children }: { children: ReactNode }) {
   const setLiveNotice = useCallback(
     (status: Extract<LiveStatus, "break" | "wait">) => {
       const notice = LIVE_NOTICE[status];
-      setMessage(`Live auction: ${notice.title} — ${notice.message}`);
+      setMessage(
+        notice.message
+          ? `Live auction: ${notice.title} — ${notice.message}`
+          : `Live auction: ${notice.title}`,
+      );
       void persistLiveNotice(status);
     },
     [persistLiveNotice],

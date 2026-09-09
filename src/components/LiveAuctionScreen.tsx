@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import LeagueLogo from "@/components/LeagueLogo";
 import PlayerProfileCard from "@/components/PlayerProfileCard";
 import SiteNav from "@/components/SiteNav";
+import { VFPL_LOGO } from "@/lib/brand";
 import { LIVE_NOTICE, isLiveStatus, type LiveStatus } from "@/lib/auction-state";
 import type { Player } from "@/lib/types";
 
@@ -121,6 +123,11 @@ export default function LiveAuctionScreen() {
   const notice = showingPlayer
     ? null
     : LIVE_NOTICE[liveStatus === "player" ? "idle" : liveStatus];
+  const noticeSubtitle = (liveMessage || notice?.message || "").trim();
+  const showNoticeSubtitle =
+    !!notice &&
+    !!noticeSubtitle &&
+    noticeSubtitle.toLowerCase() !== notice.title.toLowerCase();
 
   return (
     <div className="auction live-auction-page">
@@ -146,11 +153,21 @@ export default function LiveAuctionScreen() {
               liveStatus === "player" ? "idle" : liveStatus
             }`}
           >
-            <p className="live-notice-kicker">VFPL Live</p>
+            <div className="live-notice-crest">
+              <Image
+                src={VFPL_LOGO}
+                alt="Valvai Football Premier League"
+                width={480}
+                height={480}
+                className="live-notice-logo"
+                priority
+              />
+            </div>
+            <p className="live-notice-kicker">VMPL • PLAYER AUCTION</p>
             <h2>{notice.title}</h2>
-            <p className="live-notice-message">
-              {liveMessage || notice.message}
-            </p>
+            {showNoticeSubtitle ? (
+              <p className="live-notice-message">{noticeSubtitle}</p>
+            ) : null}
           </div>
         ) : (
           <div key={player!.id} className="live-auction-card">
