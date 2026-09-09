@@ -61,8 +61,16 @@ body {
 }
 
 .teams-page {
-  width: min(1680px, 100%);
+  width: min(1760px, 100%);
   min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.teams-page .teams {
+  flex: 1;
+  min-height: 0;
+  display: flex;
 }
 
 .live-auction-page {
@@ -216,6 +224,11 @@ body {
   border: 1px solid var(--panel-edge);
   border-left: 4px solid var(--accent);
   box-shadow: var(--shadow);
+}
+
+.teams-page .league-banner {
+  flex-shrink: 0;
+  margin-bottom: 0.85rem;
 }
 
 .league-badge {
@@ -776,11 +789,15 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
-  align-items: start;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
 }
 
 .teams-page .team-grid {
   grid-template-columns: 1fr;
+  flex: 1;
+  min-height: 0;
 }
 
 .team-panel {
@@ -788,34 +805,41 @@ body {
   cursor: pointer;
   overflow: hidden;
   min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   container-type: inline-size;
   background: var(--panel);
   border: 1px solid var(--panel-edge);
   border-radius: 10px;
   box-shadow: var(--shadow);
-  transition: transform 180ms ease, box-shadow 180ms ease;
+  transition: box-shadow 180ms ease;
+}
+
+.teams-page .team-panel {
+  height: 100%;
 }
 
 .team-panel:hover,
 .team-panel.selected {
-  transform: translateY(-3px);
   box-shadow: 0 28px 56px rgba(0, 0, 0, 0.5);
 }
 
 .team-head {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 0.65rem;
-  padding: 0.85rem 0.85rem 0.7rem;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  padding: 0.7rem 0.75rem 0.6rem;
   background: linear-gradient(135deg, color-mix(in srgb, var(--team) 25%, transparent), transparent);
   border-bottom: 2px solid var(--team);
+  flex-shrink: 0;
 }
 
 .team-crest {
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2.2rem;
+  height: 2.2rem;
   border-radius: 50%;
   background: #041018;
   display: grid;
@@ -832,8 +856,8 @@ body {
 
 .team-head-left {
   display: flex;
-  gap: 0.6rem;
-  align-items: start;
+  gap: 0.5rem;
+  align-items: center;
   min-width: 0;
   flex: 1;
 }
@@ -845,21 +869,26 @@ body {
 .team-short {
   margin: 0;
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+  font-size: clamp(1.05rem, 7cqi, 1.4rem);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--team);
   font-weight: 800;
   line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .team-full-name {
-  margin: 0.25rem 0 0;
-  font-size: clamp(0.72rem, 1.8vw, 0.88rem);
-  line-height: 1.3;
+  margin: 0.15rem 0 0;
+  font-size: clamp(0.68rem, 4.2cqi, 0.82rem);
+  line-height: 1.2;
   font-weight: 600;
   color: var(--muted);
-  overflow-wrap: anywhere;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .team-head h4 {
@@ -869,13 +898,12 @@ body {
 .team-stats {
   text-align: right;
   flex-shrink: 0;
-  margin-left: auto;
 }
 
 .points {
   margin: 0;
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(1.15rem, 3vw, 1.5rem);
+  font-size: clamp(1.05rem, 7cqi, 1.4rem);
   line-height: 1;
   color: var(--team);
 }
@@ -886,38 +914,38 @@ body {
 }
 
 .squad-label {
-  padding: 0.35rem 0.85rem 0;
+  padding: 0.3rem 0.75rem 0;
   font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: var(--muted);
   font-weight: 600;
+  flex-shrink: 0;
 }
 
 .slots-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.4rem;
-  padding: 0.5rem 0.85rem 0.85rem;
-}
-
-@container (min-width: 380px) {
-  .slots-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+  gap: 0.35rem;
+  padding: 0.4rem 0.7rem 0.7rem;
+  flex: 1;
+  min-height: 0;
 }
 
 .slot {
-  min-height: 3rem;
   min-width: 0;
-  padding: 0.3rem 0.2rem;
+  min-height: 0;
+  height: 100%;
+  padding: 0.22rem 0.28rem;
   border: 1px dashed rgba(255, 255, 255, 0.12);
   background: rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.06rem;
+  gap: 0.04rem;
   border-radius: 3px;
+  overflow: hidden;
 }
 
 .slot.filled {
@@ -947,26 +975,29 @@ body {
 
 .slot-index,
 .slot-placeholder {
-  font-size: 0.58rem;
+  font-size: 0.55rem;
   color: var(--muted);
+  flex-shrink: 0;
 }
 
 .slot-name {
-  font-size: clamp(0.62rem, 1.8vw, 0.78rem);
+  font-size: clamp(0.58rem, 5.4cqi, 0.78rem);
   font-weight: 700;
-  line-height: 1.2;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow-wrap: anywhere;
+  line-height: 1.15;
   max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .slot-bid {
   font-size: 0.58rem;
   color: var(--gold);
   font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
 }
 
 .slot-placeholder {
@@ -988,7 +1019,12 @@ body {
   }
 }
 
-@media (min-width: 1680px) {
+@media (min-width: 1400px) {
+  .teams-page {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
   .teams-page .team-grid {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
@@ -1061,14 +1097,7 @@ body {
 
   .slots-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .slot {
-    min-height: 3.5rem;
-  }
-
-  .slot-name {
-    font-size: 0.78rem;
+    grid-template-rows: repeat(5, minmax(3.1rem, 1fr));
   }
 }
 
@@ -1103,7 +1132,7 @@ body {
   }
 
   .teams-page .points {
-    font-size: 1.45rem;
+    font-size: 1.15rem;
   }
 
   .profile-card-footer {
@@ -1391,6 +1420,6 @@ body {
 @media (hover: none) {
   .team-panel:hover,
   .team-panel.selected {
-    transform: none;
+    box-shadow: var(--shadow);
   }
 }
