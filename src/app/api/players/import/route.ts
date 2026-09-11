@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { importPlayersFromPptx } from "@/lib/auction-db";
 import { parsePptxPlayers } from "@/lib/pptx-import";
+import { leanAuctionState } from "@/lib/auction-state";
 
 export const runtime = "nodejs";
+export const maxDuration = 300;
 
 export async function POST(request: Request) {
   try {
@@ -32,7 +34,7 @@ export async function POST(request: Request) {
     }
 
     const { state, count } = await importPlayersFromPptx(parsed);
-    return NextResponse.json({ ...state, imported: count });
+    return NextResponse.json({ ...leanAuctionState(state), imported: count });
   } catch (error) {
     console.error("POST /api/players/import", error);
     return NextResponse.json(

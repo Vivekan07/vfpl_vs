@@ -1049,6 +1049,11 @@ export function AuctionProvider({ children }: { children: ReactNode }) {
         });
         if (!res.ok) {
           const body = await res.json().catch(() => ({}));
+          if (res.status === 413) {
+            throw new Error(
+              "This PPTX is too large to upload (over the server limit). Try compressing the file, or restart the app after the latest update.",
+            );
+          }
           throw new Error(body.error || `Import failed (${res.status})`);
         }
         const raw = (await res.json()) as Partial<AuctionState> & {

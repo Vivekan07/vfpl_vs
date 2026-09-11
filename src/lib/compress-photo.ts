@@ -1,9 +1,9 @@
 /** Shrink PPTX photos before they go into Postgres. */
 
-const MAX_WIDTH = 480;
-const MAX_HEIGHT = 640;
-const WEBP_QUALITY = 68;
-const SKIP_UNDER_BYTES = 28_000;
+const MAX_WIDTH = 360;
+const MAX_HEIGHT = 480;
+const WEBP_QUALITY = 52;
+const SKIP_UNDER_BYTES = 12_000;
 
 function parseDataUrl(dataUrl: string): { mime: string; bytes: Buffer } | null {
   const match = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
