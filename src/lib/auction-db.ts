@@ -421,51 +421,53 @@ function formatPlayerNo(raw: string, index: number): string {
   return `No. ${String(index + 1).padStart(2, "0")}`;
 }
 
-/** Replace all players from a parsed PPTX and persist them in the database. */
+/** Replace or append players parsed from a PPTX. */
 export async function importPlayersFromPptx(
   parsed: ParsedPptxPlayer[],
+  options?: { replace?: boolean; startIndex?: number },
 ): Promise<{ state: AuctionState; count: number }> {
   const sql = getSql();
   await boot(sql);
 
-  await sql`DELETE FROM players`;
-  await writePayload(sql, emptyPayload());
+  const replace = options?.replace !== false;
+  const startIndex = options?.startIndex ?? 0;
+
+  if (replace) {
+    await sql`DELETE FROM players`;
+    await writePayload(sql, emptyPayload());
+  }
 
   if (parsed.length === 0) {
     return { state: await loadAuctionState(), count: 0 };
   }
 
-  const CHUNK = 6;
-  for (let start = 0; start < parsed.length; start += CHUNK) {
-    const slice = parsed.slice(start, start + CHUNK);
-    const ids = slice.map((_, i) => `p${start + i + 1}`);
-    const names = slice.map((p) => p.name);
-    const prices = slice.map(() => DEFAULT_BASE_PRICE);
-    const nos = slice.map((p, i) => formatPlayerNo(p.playerNo, start + i));
-    const orders = slice.map((_, i) => start + i);
-    const designations = slice.map(() => "");
-    const roles = slice.map((p) => p.role || "Footballer");
-    const contacts = slice.map((p) => p.contact);
-    const photos: string[] = [];
-    for (const player of slice) {
-      photos.push(await compressPhotoDataUrl(player.photo));
-    }
-
-    await sql`
-      INSERT INTO players (id, name, base_price, player_no, sort_order, designation, role, contact, photo)
-      SELECT * FROM UNNEST(
-        ${ids}::text[],
-        ${names}::text[],
-        ${prices}::int[],
-        ${nos}::text[],
-        ${orders}::int[],
-        ${designations}::text[],
-        ${roles}::text[],
-        ${contacts}::text[],
-        ${photos}::text[]
-      )
-    `;
+  const ids = parsed.map((_, i) => `p${startIndex + i + 1}`);
+  const names = parsed.map((p) => p.name);
+  const prices = parsed.map(() => DEFAULT_BASE_PRICE);
+  const nos = parsed.map((p, i) => formatPlayerNo(p.playerNo, startIndex + i));
+  const orders = parsed.map((_, i) => startIndex + i);
+  const designations = parsed.map(() => "");
+  const roles = parsed.map((p) => p.role || "Footballer");
+  const contacts = parsed.map((p) => p.contact);
+  const photos: string[] = [];
+  for (const player of parsed) {
+    photos.push(await compressPhotoDataUrl(player.photo));
   }
+
+  await sql`
+    INSERT INTO players (id, name, base_price, player_no, sort_order, designation, role, contact, photo)
+    SELECT * FROM UNNEST(
+      ${ids}::text[],
+      ${names}::text[],
+      ${prices}::int[],
+      ${nos}::text[],
+      ${orders}::int[],
+      ${designations}::text[],
+      ${roles}::text[],
+      ${contacts}::text[],
+      ${photos}::text[]
+    )
+  `;
 
   return { state: await loadAuctionState(), count: parsed.length };
 }

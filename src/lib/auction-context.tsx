@@ -28,6 +28,8 @@ import {
   type Player,
   type Team,
 } from "@/lib/types";
+import { parsePptxPlayers } from "@/lib/pptx-import";
+import { compressPhotoForUpload } from "@/lib/compress-photo-client";
 
 const CHANNEL_NAME = "vfpl-auction-sync";
 const CURRENT_CHANNEL_NAME = "vfpl-current-player";
@@ -1040,33 +1042,65 @@ export function AuctionProvider({ children }: { children: ReactNode }) {
   const importPptx = useCallback(
     async (file: File) => {
       try {
-        setMessage("Importing players from PPTX into the database…");
-        const formData = new FormData();
-        formData.append("file", file);
-        const res = await fetch("/api/players/import", {
-          method: "POST",
-          body: formData,
-        });
-        if (!res.ok) {
-          const body = await res.json().catch(() => ({}));
-          if (res.status === 413) {
-            throw new Error(
-              "This PPTX is too large to upload (over the server limit). Try compressing the file, or restart the app after the latest update.",
+        setMessage("Reading PPTX on this device…");
+        await new Promise((resolve) => window.setTimeout(resolve, 30));
+        const parsed = await parsePptxPlayers(await file.arrayBuffer());
+        if (parsed.length === 0) {
+          throw new Error(
+            "No player slides found. Use VMPL player profile slides with PLAYER NAME, POSITION, and CONTACT NUMBER.",
+          );
+        }
+
+        for (let i = 0; i < parsed.length; i++) {
+          if (i === 0 || (i + 1) % 8 === 0 || i === parsed.length - 1) {
+            setMessage(
+              `Compressing photos… ${i + 1} of ${parsed.length}`,
             );
           }
-          throw new Error(body.error || `Import failed (${res.status})`);
+          const player = parsed[i];
+          if (!player) continue;
+          try {
+            player.photo = await compressPhotoForUpload(player.photo);
+          } catch {
+            player.photo = "";
+          }
         }
-        const raw = (await res.json()) as Partial<AuctionState> & {
-          imported?: number;
-        };
-        const next = normalizeState(raw);
+
+        const CHUNK = 4;
+        let imported = 0;
+        let next: AuctionState | null = null;
+        for (let start = 0; start < parsed.length; start += CHUNK) {
+          const slice = parsed.slice(start, start + CHUNK);
+          setMessage(
+            `Saving players ${start + 1}–${Math.min(start + CHUNK, parsed.length)} of ${parsed.length}…`,
+          );
+          const res = await fetch("/api/players/import", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              players: slice,
+              replace: start === 0,
+              startIndex: start,
+            }),
+          });
+          if (!res.ok) {
+            const body = await res.json().catch(() => ({}));
+            throw new Error(body.error || `Import failed (${res.status})`);
+          }
+          const raw = (await res.json()) as Partial<AuctionState> & {
+            imported?: number;
+          };
+          imported += raw.imported ?? slice.length;
+          next = normalizeState(raw);
+        }
+
         if (!next) throw new Error("Import returned empty state");
         applyState(next, true);
         setSelectedPlayerId(null);
         setSelectedTeamId(next.teams[0]?.id ?? "");
         setBid(DEFAULT_BASE_PRICE);
         setMessage(
-          `Saved ${raw.imported ?? next.pool.length} players to the database from PPTX.`,
+          `Saved ${imported} players to the database from PPTX.`,
         );
         channelRef.current?.postMessage(next);
       } catch (error) {

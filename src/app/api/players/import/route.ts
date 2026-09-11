@@ -1,29 +1,40 @@
 import { NextResponse } from "next/server";
 import { importPlayersFromPptx } from "@/lib/auction-db";
-import { parsePptxPlayers } from "@/lib/pptx-import";
+import type { ParsedPptxPlayer } from "@/lib/pptx-import";
 import { leanAuctionState } from "@/lib/auction-state";
 
 export const runtime = "nodejs";
-export const maxDuration = 300;
+export const maxDuration = 60;
+
+function normalizeIncomingPlayers(raw: unknown): ParsedPptxPlayer[] {
+  if (!Array.isArray(raw)) return [];
+  const players: ParsedPptxPlayer[] = [];
+  for (const item of raw) {
+    if (!item || typeof item !== "object") continue;
+    const row = item as Partial<ParsedPptxPlayer>;
+    const name = String(row.name ?? "").trim();
+    if (!name) continue;
+    players.push({
+      name,
+      role: String(row.role ?? "Footballer"),
+      contact: String(row.contact ?? ""),
+      playerNo: String(row.playerNo ?? ""),
+      photo: typeof row.photo === "string" ? row.photo : "",
+    });
+  }
+  return players;
+}
 
 export async function POST(request: Request) {
   try {
-    const formData = await request.formData();
-    const file = formData.get("file");
+    const body = (await request.json()) as {
+      players?: unknown;
+      replace?: boolean;
+      startIndex?: number;
+    };
 
-    if (!(file instanceof File)) {
-      return NextResponse.json({ error: "Upload a .pptx file" }, { status: 400 });
-    }
-
-    if (!file.name.toLowerCase().endsWith(".pptx")) {
-      return NextResponse.json(
-        { error: "Only .pptx files are supported" },
-        { status: 400 },
-      );
-    }
-
-    const parsed = await parsePptxPlayers(await file.arrayBuffer());
-    if (parsed.length === 0) {
+    const parsed = normalizeIncomingPlayers(body.players);
+    if (parsed.length === 0 && body.replace !== false) {
       return NextResponse.json(
         {
           error:
@@ -33,7 +44,13 @@ export async function POST(request: Request) {
       );
     }
 
-    const { state, count } = await importPlayersFromPptx(parsed);
+    const { state, count } = await importPlayersFromPptx(parsed, {
+      replace: body.replace !== false,
+      startIndex:
+        typeof body.startIndex === "number" && Number.isFinite(body.startIndex)
+          ? Math.max(0, Math.floor(body.startIndex))
+          : 0,
+    });
     return NextResponse.json({ ...leanAuctionState(state), imported: count });
   } catch (error) {
     console.error("POST /api/players/import", error);
