@@ -7,7 +7,6 @@ const nextConfig: NextConfig = {
   experimental: {
     // Player PPTX files with photos are far larger than the 10MB default.
     proxyClientMaxBodySize: "100mb",
-    middlewareClientMaxBodySize: "100mb",
     serverActions: {
       bodySizeLimit: "100mb",
     },
