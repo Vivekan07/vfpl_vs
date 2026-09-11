@@ -1281,7 +1281,7 @@ body {
 .profile-details-panel {
   border: 2px solid #5eb3ff;
   border-radius: 16px;
-  background: rgba(6, 16, 34, 0.92);
+  background: linear-gradient(180deg, #0c1d38 0%, #081428 100%);
   min-height: 280px;
 }
 
@@ -1290,6 +1290,7 @@ body {
   place-items: center;
   overflow: hidden;
   padding: 0.75rem;
+  background: linear-gradient(180deg, #102444 0%, #0a1830 100%);
 }
 
 .profile-photo {
@@ -1298,6 +1299,13 @@ body {
   max-height: 320px;
   object-fit: contain;
   object-position: center bottom;
+  background: transparent;
+}
+
+.profile-photo-loading {
+  width: 100%;
+  min-height: 12rem;
+  background: transparent;
 }
 
 .profile-photo-empty {

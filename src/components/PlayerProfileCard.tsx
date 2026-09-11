@@ -1,6 +1,7 @@
 import { displayPlayerNo, type Player } from "@/lib/types";
 import { VFPL_LOGO } from "@/lib/brand";
 import Image from "next/image";
+import PlayerPhoto from "@/components/PlayerPhoto";
 
 type PlayerProfileCardProps = {
   player: Player;
@@ -37,8 +38,7 @@ export default function PlayerProfileCard({ player }: PlayerProfileCardProps) {
       <div className="profile-card-body">
         <div className="profile-photo-panel">
           {player.photo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <PlayerPhoto
               src={player.photo}
               alt={player.name}
               className="profile-photo"
